@@ -1,0 +1,38 @@
+@startuml
+
+title URL test - Activity Diagram 
+-- Givet som eksempel til Kombit
+
+start
+
+:Test URL;
+note right: skemanavn://subdomæne.domæne.topdomæne:port/sti/side
+
+
+if (Er domæne registreret? whois) then (nej)
+  :Status: GONE;
+else (ja)
+  :Test service;
+	if (Er tjenesten aktiv? ping, head) then (nej)
+	  :Status: GONE;
+	else (ja)
+		if (Er HTTP-webservice aktiv? head) then (nej)
+			:Status: GONE;
+		else (ja)
+			repeat
+				if (Findes URL? head) then (nej)
+					:Gem status: BROKEN;
+				else (ja)
+					:Gem status: OK;
+				endif
+			repeat while (Domænet har URL'er)
+		endif
+	endif
+endif
+
+
+:Return status;
+
+stop
+
+@enduml
